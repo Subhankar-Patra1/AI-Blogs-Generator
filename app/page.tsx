@@ -100,6 +100,11 @@ function BlogGeneratorContent() {
     setIsSample(false)
 
     try {
+      // Retrieve API key from localStorage
+      let apiKey = '';
+      if (typeof window !== 'undefined') {
+        apiKey = localStorage.getItem('blog-generator-api-key') || '';
+      }
       const result = await generateBlog(topic.trim(), {
         tone: styleToneSettings.tone,
         style: styleToneSettings.style,
@@ -107,7 +112,7 @@ function BlogGeneratorContent() {
         length: wordCountSettings.length,
         language: languageSettings.language,
         languageCode: languageSettings.languageCode,
-      })
+      }, apiKey)
 
       if (result.success) {
         setBlogPost(result.content)
@@ -292,7 +297,12 @@ function BlogGeneratorContent() {
     setIsTranslating(true)
     try {
       const targetLanguage = getLanguageByCode(targetLanguageCode)
-      const result = await translateContent(blogPost, targetLanguage?.name || "English", targetLanguageCode)
+      // Retrieve API key from localStorage
+      let apiKey = '';
+      if (typeof window !== 'undefined') {
+        apiKey = localStorage.getItem('blog-generator-api-key') || '';
+      }
+      const result = await translateContent(blogPost, targetLanguage?.name || "English", targetLanguageCode, apiKey)
       if (result.success) {
         return result.content
       } else {
@@ -319,7 +329,12 @@ function BlogGeneratorContent() {
 
   const handleEnhanceTopic = async (originalTopic: string, options: any) => {
     try {
-      const result = await enhanceTopic(originalTopic, options)
+      // Retrieve API key from localStorage
+      let apiKey = '';
+      if (typeof window !== 'undefined') {
+        apiKey = localStorage.getItem('blog-generator-api-key') || '';
+      }
+      const result = await enhanceTopic(originalTopic, options, apiKey)
       return result
     } catch (error) {
       console.error("Enhancement failed:", error)
@@ -524,7 +539,13 @@ function BlogGeneratorContent() {
                     <ContentRepurposingDialog
                       blogContent={blogPost}
                       blogTitle={topic}
-                      onGenerate={generateContentRepurposing}
+                      onGenerate={async (content, format, options) => {
+                        let apiKey = '';
+                        if (typeof window !== 'undefined') {
+                          apiKey = localStorage.getItem('blog-generator-api-key') || '';
+                        }
+                        return await generateContentRepurposing(content, format, options, apiKey);
+                      }}
                     />
                   </div>
                 </div>

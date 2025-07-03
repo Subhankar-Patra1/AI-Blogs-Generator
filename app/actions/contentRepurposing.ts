@@ -35,10 +35,10 @@ interface PodcastOptions {
   hostName: string
 }
 
-export async function generateTwitterThread(blogContent: string, options: TwitterOptions) {
+export async function generateTwitterThread(blogContent: string, options: TwitterOptions, apiKey?: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     const threadLengthMap = {
@@ -122,10 +122,10 @@ IMPORTANT: Return ONLY the JSON, no additional text.`,
   }
 }
 
-export async function generateLinkedInPost(blogContent: string, options: LinkedInOptions) {
+export async function generateLinkedInPost(blogContent: string, options: LinkedInOptions, apiKey?: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     const lengthMap = {
@@ -213,10 +213,10 @@ What's your experience with this? I'd love to hear your thoughts in the comments
   }
 }
 
-export async function generateEmailNewsletter(blogContent: string, options: EmailOptions) {
+export async function generateEmailNewsletter(blogContent: string, options: EmailOptions, apiKey?: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     const styleInstructions = {
@@ -332,10 +332,10 @@ IMPORTANT: Return ONLY the JSON, no additional text.`,
   }
 }
 
-export async function generatePodcastScript(blogContent: string, options: PodcastOptions) {
+export async function generatePodcastScript(blogContent: string, options: PodcastOptions, apiKey?: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     const styleInstructions = {
@@ -431,16 +431,16 @@ IMPORTANT: Return ONLY the JSON, no additional text.`,
   }
 }
 
-export async function generateContentRepurposing(content: string, format: string, options: any) {
+export async function generateContentRepurposing(content: string, format: string, options: any, apiKey?: string) {
   switch (format) {
     case "twitter":
-      return await generateTwitterThread(content, options)
+      return await generateTwitterThread(content, options, apiKey)
     case "linkedin":
-      return await generateLinkedInPost(content, options)
+      return await generateLinkedInPost(content, options, apiKey)
     case "email":
-      return await generateEmailNewsletter(content, options)
+      return await generateEmailNewsletter(content, options, apiKey)
     case "podcast":
-      return await generatePodcastScript(content, options)
+      return await generatePodcastScript(content, options, apiKey)
     default:
       return {
         success: false,

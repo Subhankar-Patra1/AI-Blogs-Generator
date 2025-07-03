@@ -19,11 +19,11 @@ interface EnhancementOptions {
   length: "short" | "medium" | "long"
 }
 
-export async function generateBlog(topic: string, options: BlogGenerationOptions = {}) {
+export async function generateBlog(topic: string, options: BlogGenerationOptions = {}, apiKey?: string) {
   try {
-    // Create Google AI provider instance with your API key
+    // Use user-provided API key if available, otherwise fallback to env
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     console.log("Generating blog post for topic:", topic, "with options:", options)
@@ -178,10 +178,10 @@ Format the response as clean markdown that will render beautifully.`,
 }
 
 // Translation function
-export async function translateContent(content: string, targetLanguage: string, targetLanguageCode: string) {
+export async function translateContent(content: string, targetLanguage: string, targetLanguageCode: string, apiKey?: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     console.log("Translating content to:", targetLanguage)
@@ -270,10 +270,10 @@ function generateFallbackSuggestions(topic: string, options: EnhancementOptions)
 }
 
 // Enhanced topic generation function
-export async function enhanceTopic(originalTopic: string, options: EnhancementOptions) {
+export async function enhanceTopic(originalTopic: string, options: EnhancementOptions, apiKey?: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: process.env.GOOGLE_API_KEY!,
+      apiKey: apiKey || process.env.GOOGLE_API_KEY!,
     })
 
     console.log("Enhancing topic:", originalTopic, "with options:", options)
