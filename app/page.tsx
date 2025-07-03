@@ -393,6 +393,123 @@ function BlogGeneratorContent() {
     </Alert>
   )
 
+  // Update style/tone and regenerate blog
+  const handleStyleToneChange = async (newSettings: StyleToneSettings) => {
+    setStyleToneSettings(newSettings)
+    if (!topic.trim()) return
+    setIsLoading(true)
+    setError("")
+    setErrorType("")
+    setIsSample(false)
+    try {
+      let apiKey = '';
+      if (typeof window !== 'undefined') {
+        apiKey = localStorage.getItem('blog-generator-api-key') || '';
+      }
+      const result = await generateBlog(topic.trim(), {
+        tone: newSettings.tone,
+        style: newSettings.style,
+        wordCount: wordCountSettings.wordCount,
+        length: wordCountSettings.length,
+        language: languageSettings.language,
+        languageCode: languageSettings.languageCode,
+      }, apiKey)
+      if (result.success) {
+        setBlogPost(result.content)
+        setIsEditMode(false)
+        setIsSample(result.isSample || false)
+        saveVersion(result.content, `AI Generated in ${languageSettings.language}`)
+        addToHistory(topic.trim(), result.content, result.isSample || false)
+      } else {
+        setError(result.error || "Failed to generate blog post")
+        setErrorType(result.errorType || "unknown")
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.")
+      setErrorType("network")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Update word count and regenerate blog
+  const handleWordCountChange = async (newSettings: WordCountSettings) => {
+    setWordCountSettings(newSettings)
+    if (!topic.trim()) return
+    setIsLoading(true)
+    setError("")
+    setErrorType("")
+    setIsSample(false)
+    try {
+      let apiKey = '';
+      if (typeof window !== 'undefined') {
+        apiKey = localStorage.getItem('blog-generator-api-key') || '';
+      }
+      const result = await generateBlog(topic.trim(), {
+        tone: styleToneSettings.tone,
+        style: styleToneSettings.style,
+        wordCount: newSettings.wordCount,
+        length: newSettings.length,
+        language: languageSettings.language,
+        languageCode: languageSettings.languageCode,
+      }, apiKey)
+      if (result.success) {
+        setBlogPost(result.content)
+        setIsEditMode(false)
+        setIsSample(result.isSample || false)
+        saveVersion(result.content, `AI Generated in ${languageSettings.language}`)
+        addToHistory(topic.trim(), result.content, result.isSample || false)
+      } else {
+        setError(result.error || "Failed to generate blog post")
+        setErrorType(result.errorType || "unknown")
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.")
+      setErrorType("network")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Update language and regenerate blog
+  const handleLanguageChange = async (newSettings: LanguageSettings) => {
+    setLanguageSettings(newSettings)
+    if (!topic.trim()) return
+    setIsLoading(true)
+    setError("")
+    setErrorType("")
+    setIsSample(false)
+    try {
+      let apiKey = '';
+      if (typeof window !== 'undefined') {
+        apiKey = localStorage.getItem('blog-generator-api-key') || '';
+      }
+      const result = await generateBlog(topic.trim(), {
+        tone: styleToneSettings.tone,
+        style: styleToneSettings.style,
+        wordCount: wordCountSettings.wordCount,
+        length: wordCountSettings.length,
+        language: newSettings.language,
+        languageCode: newSettings.languageCode,
+      }, apiKey)
+      if (result.success) {
+        setBlogPost(result.content)
+        setIsEditMode(false)
+        setIsSample(result.isSample || false)
+        saveVersion(result.content, `AI Generated in ${newSettings.language}`)
+        addToHistory(topic.trim(), result.content, result.isSample || false)
+      } else {
+        setError(result.error || "Failed to generate blog post")
+        setErrorType(result.errorType || "unknown")
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.")
+      setErrorType("network")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <IntegrationWarningDialog />
@@ -459,13 +576,13 @@ function BlogGeneratorContent() {
                 </div>
                 <TopicSuggestions onSelectTopic={handleTopicSelect} currentTopic={topic} />
                 <LanguageSelector
-                  onSettingsChange={setLanguageSettings}
+                  onSettingsChange={handleLanguageChange}
                   currentSettings={languageSettings}
                   isTranslating={isTranslating}
                   disabled={!hasApiKey}
                 />
-                <StyleToneSelector onSettingsChange={setStyleToneSettings} currentSettings={styleToneSettings} disabled={!hasApiKey} />
-                <WordCountSelector onSettingsChange={setWordCountSettings} currentSettings={wordCountSettings} />
+                <StyleToneSelector onSettingsChange={handleStyleToneChange} currentSettings={styleToneSettings} disabled={!hasApiKey} />
+                <WordCountSelector onSettingsChange={handleWordCountChange} currentSettings={wordCountSettings} />
               </form>
             </CardContent>
           </Card>
