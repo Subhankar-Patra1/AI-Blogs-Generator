@@ -38,7 +38,7 @@ interface PodcastOptions {
 export async function generateTwitterThread(blogContent: string, options: TwitterOptions) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     const threadLengthMap = {
@@ -125,7 +125,7 @@ IMPORTANT: Return ONLY the JSON, no additional text.`,
 export async function generateLinkedInPost(blogContent: string, options: LinkedInOptions) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     const lengthMap = {
@@ -216,7 +216,7 @@ What's your experience with this? I'd love to hear your thoughts in the comments
 export async function generateEmailNewsletter(blogContent: string, options: EmailOptions) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     const styleInstructions = {
@@ -335,7 +335,7 @@ IMPORTANT: Return ONLY the JSON, no additional text.`,
 export async function generatePodcastScript(blogContent: string, options: PodcastOptions) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     const styleInstructions = {

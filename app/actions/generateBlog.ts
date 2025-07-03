@@ -23,7 +23,7 @@ export async function generateBlog(topic: string, options: BlogGenerationOptions
   try {
     // Create Google AI provider instance with your API key
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     console.log("Generating blog post for topic:", topic, "with options:", options)
@@ -181,7 +181,7 @@ Format the response as clean markdown that will render beautifully.`,
 export async function translateContent(content: string, targetLanguage: string, targetLanguageCode: string) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     console.log("Translating content to:", targetLanguage)
@@ -273,7 +273,7 @@ function generateFallbackSuggestions(topic: string, options: EnhancementOptions)
 export async function enhanceTopic(originalTopic: string, options: EnhancementOptions) {
   try {
     const google = createGoogleGenerativeAI({
-      apiKey: "REMOVED",
+      apiKey: process.env.GOOGLE_API_KEY!,
     })
 
     console.log("Enhancing topic:", originalTopic, "with options:", options)
